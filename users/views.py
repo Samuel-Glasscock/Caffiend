@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
 from .models import Profile
+from .forms import UserSignupForm, UserProfileForm
+from django.contrib.auth import login
+from django.db import transaction
 
 
 class UserLoginView(LoginView):
@@ -25,3 +28,27 @@ class ProfileView(LoginRequiredMixin, DetailView):
 
     def get_object(self):
         return self.request.user.profile
+    
+def signup(request):
+    if request.method == 'POST':
+        form = UserSignupForm(request.POST)
+        profile_form = UserProfileForm(request.POST)
+        if form.is_valid() and profile_form.is_valid():
+            user = form.save()
+            # from GPT-4 for handling data integrity
+            with transaction.atomic():
+                # Try to get the profile if it exists, or create a new one
+                profile, created = Profile.objects.get_or_create(user=user)
+                # Update the profile with the form data
+                profile.weight = profile_form.cleaned_data.get('weight')
+                profile.avg_caffeine_intake = profile_form.cleaned_data.get('avg_caffeine_intake')
+                profile.duration_number = profile_form.cleaned_data.get('duration_number')
+                profile.duration_type = profile_form.cleaned_data.get('duration_type')
+                profile.save()
+        
+            login(request, user)
+            return redirect('profile')
+    else:
+        form = UserSignupForm()
+        profile_form = UserProfileForm()
+    return render(request, 'users/signup.html', {'form': form, 'profile_form': profile_form})
