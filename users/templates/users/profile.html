@@ -10,8 +10,8 @@
 
     <!-- Display user profile information -->
     <p>Username: {{ user.username }}</p>
-    <p>Email: {{ user.email }}</p>
-    <p>Average Caffeine Intake: {{ profile.avg_caffeine_intake }}</p>
+    <!-- <p>Email: {{ user.email }}</p> -->
+    <!-- <p>Average Caffeine Intake: {{ profile.avg_caffeine_intake }}</p> -->
 
     <!-- Form to update average caffeine intake -->
     <form action="{% url 'update_avg_caffeine_intake' %}" method="post">
@@ -20,6 +20,21 @@
         <input type="number" id="avg_caffeine_intake" name="avg_caffeine_intake" value="{{ profile.avg_caffeine_intake }}">
         <button type="submit">Update</button>
     </form>
+
+    <p>Average Caffeine Intake: {{ profile.avg_caffeine_intake }}</p>
+
+    <!-- JavaScript to calculate and display max caffeine consumption -->
+<!-- JavaScript to calculate and display max caffeine consumption -->
+<script>
+    // Convert body weight from lbs to kg
+    var lbs_to_kg = 0.453592 * {{ profile.weight }};
+    // Calculate low and high max dosage per kg
+    var low_max_dosage_per_kg = lbs_to_kg * 2.5;
+    var high_max_dosage_per_kg = lbs_to_kg * 4;
+    // Display the result with label
+    document.write("<p><strong>Max caffeine consumption:</strong> " + low_max_dosage_per_kg.toFixed(2) + " to " + high_max_dosage_per_kg.toFixed(2) + " mg</p>");
+</script>
+
 
     <!-- Navigation links -->
     <h1>You are on Profile</h1>
@@ -30,5 +45,4 @@
     </form>
 </body>
 </html>
-
 

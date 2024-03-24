@@ -21,3 +21,4 @@ class UpdateAvgCaffeineIntakeForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['avg_caffeine_intake']
+

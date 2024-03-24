@@ -17,9 +17,12 @@
             background-color: lightgreen;
         }
 
-        .not-recommended,
-        .zero-intake {
+        .not-recommended {
             background-color: #8a47ff;
+        }
+
+        .zero-intake {
+            font-weight: bold;
         }
 
         .hidden {
@@ -33,17 +36,21 @@
         <h1>Reset Tolerance/Reduce Intake</h1>
         <h2 id="avg-caffeine-intake-header"></h2>
         <h3 id="current-date"></h3>
-        <h2>Schedule to Decrease Caffeine Consumption</h2> <!-- New Header -->
+        <h2>Schedule to Decrease Caffeine Consumption</h2>
         <div class="mb-3">
             <label for="dose-decrease" class="form-label">Select dose decrease (mg):</label>
-            <input type="range" id="dose-decrease" name="dose_decrease" class="form-range" min="10" max="{{ max_caffeine_intake }}" step="10" value="20" oninput="updateRecommendationGrid(); updateRangeValue()">
+            <!-- Adjusted max attribute to average caffeine intake -->
+            <input type="range" id="dose-decrease" name="dose_decrease" class="form-range" min="10" step="10" value="20" oninput="updateRecommendationGrid(); updateRangeValue()" max="{{ avg_caffeine_intake }}">
             <output for="dose-decrease" id="dose-output">20 mg</output>
+        </div>
+        <div class="mt-3" id="warning-message" style="display: none;">
+            <p>Recommended to reduce withdrawal symptoms</p>
         </div>
         <div class="mt-3">
             <div class="recommendation"></div>
             <ul class="list-group" id="recommendation-grid"></ul>
         </div>
-        <button id="choose-schedule-btn" class="btn btn-primary mt-3">Select Schedule</button> <!-- Changed button text -->
+        <button id="choose-schedule-btn" class="btn btn-primary mt-3">Select Schedule</button>
     </div>
 
     <!-- Bootstrap JS -->
@@ -70,7 +77,6 @@
             const recommendationGrid = document.getElementById('recommendation-grid');
 
             recommendationDiv.innerHTML = ''; // Clear recommendation message
-
             recommendationGrid.innerHTML = ''; // Clear previous content
 
             let caffeineIntake = avgCaffeineIntake;
@@ -82,26 +88,42 @@
                 listItem.classList.add('list-group-item');
 
                 listItem.textContent = `Day ${day}: ${caffeineIntake.toFixed(1)} mg`;
-
                 recommendationGrid.appendChild(listItem);
 
                 caffeineIntake = recommendedIntake;
                 day++;
             }
+
+            // Add the entry for day tolerance reset
+            const listItem = document.createElement('li');
+            listItem.classList.add('list-group-item', 'zero-intake');
+            listItem.innerHTML = `<strong>Day ${day}: 0 mg</strong>`;
+            recommendationGrid.appendChild(listItem);
+
+            const resetMessage = document.createElement('p');
+            resetMessage.textContent = "Day tolerance reset starts";
+            recommendationGrid.appendChild(resetMessage);
         }
 
         function updateRangeValue() {
-            const rangeValue = document.getElementById('dose-decrease').value;
+            const rangeValue = parseInt(document.getElementById('dose-decrease').value);
             document.getElementById('dose-output').textContent = rangeValue + ' mg';
+
+            if (rangeValue <= 30) {
+                document.getElementById('warning-message').style.display = 'block';
+            } else {
+                document.getElementById('warning-message').style.display = 'none';
+            }
         }
 
         const chooseScheduleBtn = document.getElementById('choose-schedule-btn');
         chooseScheduleBtn.addEventListener('click', function() {
-            window.location.href = '/tracker/reduce-intake/track_caffeine/'; // Updated URL
+            window.location.href = '/tracker/reduce-intake/track_caffeine/';
         });
 
     </script>
 </body>
 
 </html>
+
 
