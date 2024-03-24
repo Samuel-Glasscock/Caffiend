@@ -2,9 +2,16 @@
 {% extends 'shared/base.html' %}
 
 {% block content %}
+<h1>Have an account? Login!</h1>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Login</button>
+</form>
+
+<h1>Don't have an account? Sign Up!</h1>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Don't have an account? Sign Up!</button>
 </form>
 {% endblock %}

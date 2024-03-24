@@ -10,14 +10,18 @@
 <body>
     <header>
         <h1>Caffeine Optimization App</h1>
-        <nav>
+
+        <form action="{% url 'login' %}" method="get">
+        <button type="submit">Login</button>
+    </form>
+        <!-- <nav>
             <ul>
                 <li><a href="#">Home</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">Sign Up</a></li>
                 <li><a href="#">Log In</a></li>
             </ul>
-        </nav>
+        </nav> -->
     </header>
 
     <section class="hero">
