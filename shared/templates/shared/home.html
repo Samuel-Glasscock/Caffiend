@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caffeind</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <header>
+        <h1>Caffeine Optimization App</h1>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Sign Up</a></li>
+                <li><a href="#">Log In</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Optimize Your Caffeine Consumption</h2>
+            <p>Make the most out of your daily caffeine intake while avoiding tolerance buildup.</p>
+            <a href="#about" class="btn">Learn More</a>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="about-content">
+            <h2>About Us</h2>
+            <p>Welcome to the Caffeine Optimization App, where we help you maximize the benefits of caffeine while minimizing tolerance buildup.</p>
+            <p>Our app provides personalized recommendations based on scientific research and your individual caffeine consumption habits.</p>
+            <a href="#signup" class="btn">Sign Up Now</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Caffeine Optimization App. All rights reserved.</p>
+    </footer>
+</body>
+</html>

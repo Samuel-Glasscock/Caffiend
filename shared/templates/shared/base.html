@@ -1,0 +1,25 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+</head>
+<body>
+    <header>
+        {% if user.is_authenticated %}
+            <p>Hello, {{ user.username }}. <a href="{% url 'logout' %}">Logout</a></p>
+        {% else %}
+            <p>You are not logged in.</p>
+        {% endif %}
+    </header>
+
+    {% block content %}
+    <!-- Page  content -->
+    {% endblock content %}
+
+    {% csrf_token %}
+    <footer>
+        
+    </footer>
+</body>
+</html>
