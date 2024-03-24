@@ -36,7 +36,7 @@
         <h2>Schedule to Decrease Caffeine Consumption</h2> <!-- New Header -->
         <div class="mb-3">
             <label for="dose-decrease" class="form-label">Select dose decrease (mg):</label>
-            <input type="range" id="dose-decrease" name="dose_decrease" class="form-range" min="10" max="{{ max_caffeine_intake }}" step="10" oninput="updateRecommendationGrid()">
+            <input type="range" id="dose-decrease" name="dose_decrease" class="form-range" min="10" max="{{ max_caffeine_intake }}" step="10" value="20" oninput="updateRecommendationGrid(); updateRangeValue()">
             <output for="dose-decrease" id="dose-output">20 mg</output>
         </div>
         <div class="mt-3">
@@ -64,44 +64,35 @@
         };
         currentDateElement.textContent = currentDate.toLocaleDateString('en-US', options);
 
-        let firstRedBoxAdded = false;
-
         function updateRecommendationGrid() {
             const doseDecreaseValue = parseInt(document.getElementById('dose-decrease').value);
             const recommendationDiv = document.querySelector('.recommendation');
             const recommendationGrid = document.getElementById('recommendation-grid');
-            const numDays = 14;
 
-            if (doseDecreaseValue <= 30) {
-                recommendationDiv.innerHTML = "<p class='recommended'>Recommended to minimize withdrawal symptoms</p>";
-            } else {
-                recommendationDiv.innerHTML = ""; // Clear recommendation message if dose is above 30 mg
-            }
+            recommendationDiv.innerHTML = ''; // Clear recommendation message
 
             recommendationGrid.innerHTML = ''; // Clear previous content
 
-            for (let i = 0; i < numDays; i++) {
-                const recommendedIntake = Math.max(avgCaffeineIntake - (doseDecreaseValue * i), 0);
+            let caffeineIntake = avgCaffeineIntake;
+            let day = 1;
+
+            while (caffeineIntake > 0) {
+                const recommendedIntake = Math.max(caffeineIntake - doseDecreaseValue, 0);
                 const listItem = document.createElement('li');
                 listItem.classList.add('list-group-item');
 
-                if (recommendedIntake === 0) {
-                    listItem.classList.add('zero-intake');
-                    listItem.textContent = "0 mg";
-                } else if (recommendedIntake < 0.1) {
-                    if (!firstRedBoxAdded) {
-                        listItem.classList.add('zero-intake', 'not-recommended');
-                        listItem.textContent = "0 mg";
-                        firstRedBoxAdded = true;
-                    } else {
-                        listItem.classList.add('hidden');
-                    }
-                } else {
-                    listItem.textContent = `Day ${i + 1}: ${recommendedIntake.toFixed(1)} mg`;
-                }
+                listItem.textContent = `Day ${day}: ${caffeineIntake.toFixed(1)} mg`;
 
                 recommendationGrid.appendChild(listItem);
+
+                caffeineIntake = recommendedIntake;
+                day++;
             }
+        }
+
+        function updateRangeValue() {
+            const rangeValue = document.getElementById('dose-decrease').value;
+            document.getElementById('dose-output').textContent = rangeValue + ' mg';
         }
 
         const chooseScheduleBtn = document.getElementById('choose-schedule-btn');
@@ -113,3 +104,4 @@
 </body>
 
 </html>
+
