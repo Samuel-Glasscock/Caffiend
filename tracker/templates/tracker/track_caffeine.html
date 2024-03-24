@@ -48,16 +48,16 @@
                 </thead>
                 <tbody id="schedule-body">
                     {% for entry in schedule %}
-                    <tr>
+                    <tr id="day-{{ entry.day_number }}" class="{% if entry.day_number == 1 %}zero-intake{% endif %}">
                         <td>{{ entry.date }}</td>
                         <td>{{ entry.recommended_caffeine }} mg</td>
                         <td>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="consumed_{{ entry.day_number }}" id="yes_{{ entry.day_number }}" value="yes">
+                                <input class="form-check-input" type="radio" name="consumed_{{ entry.day_number }}" id="yes_{{ entry.day_number }}" value="yes" {% if entry.day_number != 1 %}disabled{% endif %}>
                                 <label class="form-check-label" for="yes_{{ entry.day_number }}">Yes</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="consumed_{{ entry.day_number }}" id="no_{{ entry.day_number }}" value="no">
+                                <input class="form-check-input" type="radio" name="consumed_{{ entry.day_number }}" id="no_{{ entry.day_number }}" value="no" {% if entry.day_number != 1 %}disabled{% endif %}>
                                 <label class="form-check-label" for="no_{{ entry.day_number }}">No</label>
                             </div>
                             <div id="caffeine-input-{{ entry.day_number }}" class="hidden">
@@ -81,17 +81,12 @@
         document.addEventListener('DOMContentLoaded', function () {
             const radioButtons = document.querySelectorAll('input[type="radio"]');
             radioButtons.forEach(function (radioButton, index) {
-                if (index !== 0) {
-                    radioButton.disabled = true; // Disable radio buttons except for the first one (index 0)
-                }
-            });
-
-            radioButtons.forEach(function (radioButton, index) {
                 radioButton.addEventListener('change', function () {
                     if (radioButton.checked) {
-                        const nextIndex = index + 1;
+                        const currentDayIndex = parseInt(radioButton.id.split('_')[1]);
+                        const nextIndex = currentDayIndex + 1;
                         if (nextIndex < radioButtons.length) {
-                            radioButtons[nextIndex].disabled = false; // Enable the next radio button when the current one is checked
+                            radioButtons[nextIndex].disabled = false; // Enable the radio button for the next day
                         }
                         radioButtons[index].disabled = true; // Disable the current radio button
 
@@ -114,8 +109,28 @@
             for (let entry of formData.entries()) {
                 console.log(entry[0], entry[1]);
             }
+
+            // Update the appearance of the next day (if any)
+            const currentDayIndex = parseInt(document.querySelector('input[type="radio"]:checked').id.split('_')[1]);
+            const nextDayIndex = currentDayIndex + 1;
+            const nextDayRow = document.getElementById(`day-${nextDayIndex}`);
+            if (nextDayRow) {
+                nextDayRow.classList.add('zero-intake');
+            }
+
+            // Disable radio buttons for the submitted day
+            const submittedRadioButton = document.querySelector('input[type="radio"]:checked');
+            submittedRadioButton.disabled = true;
+
+            // Remove bold styling from the previous day
+            const previousDayIndex = currentDayIndex - 1;
+            const previousDayRow = document.getElementById(`day-${previousDayIndex}`);
+            if (previousDayRow) {
+                previousDayRow.classList.remove('zero-intake');
+            }
         });
     </script>
 </body>
 
 </html>
+
