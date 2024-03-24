@@ -101,9 +101,9 @@ ul li {
         <div class="recommendation"></div>
         <ul class="list-group" id="recommendation-grid"></ul>
       </div>
-      <button id="choose-schedule-btn" class="btn btn-primary mt-3">
+      <!-- <button id="choose-schedule-btn" class="btn btn-primary mt-3">
         Select Schedule
-      </button>
+      </button> -->
     </div>
 
     <!-- Bootstrap JS -->
@@ -169,11 +169,11 @@ ul li {
           }
       }
 
-      const chooseScheduleBtn = document.getElementById('choose-schedule-btn');
-      chooseScheduleBtn.addEventListener('click', function() {
-          const doseDecreaseValue = document.getElementById('dose-decrease').value;
-          window.location.href = `/tracker/reduce-intake/track_caffeine/?dose_decrease=${doseDecreaseValue}`;
-      });
+    //   const chooseScheduleBtn = document.getElementById('choose-schedule-btn');
+    //   chooseScheduleBtn.addEventListener('click', function() {
+    //       const doseDecreaseValue = document.getElementById('dose-decrease').value;
+    //       window.location.href = `/tracker/reduce-intake/track_caffeine/?dose_decrease=${doseDecreaseValue}`;
+    //   });
     </script>
   </body>
 </html>
