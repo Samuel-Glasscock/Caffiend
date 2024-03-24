@@ -25,6 +25,7 @@
 </head>
 <body>
     <h1>Reset Tolerance/Reduce Intake</h1>
+    <h2 id="avg-caffeine-intake-header"></h2> <!-- Header to display average caffeine intake -->
     <label for="dose-decrease">Select dose decrease (mg):</label>
     <input type="range" id="dose-decrease" name="dose_decrease" min="10" max="30" value="20">
     <output for="dose-decrease" id="dose-output">20 mg</output><br>
@@ -33,49 +34,9 @@
     <button id="choose-schedule-btn">Choose Recommended Schedule</button>
 
     <script>
-        const doseDecreaseInput = document.getElementById('dose-decrease');
-        const doseOutput = document.getElementById('dose-output');
-        const recommendationDiv = document.querySelector('.recommendation');
-        const recommendationGrid = document.getElementById('recommendation-grid');
-        const chooseScheduleBtn = document.getElementById('choose-schedule-btn');
-
-        doseDecreaseInput.addEventListener('input', function() {
-            const doseDecreaseValue = parseInt(this.value);
-            doseOutput.textContent = doseDecreaseValue + " mg";
-
-            if (doseDecreaseValue >= 10 && doseDecreaseValue <= 30) {
-                recommendationDiv.innerHTML = "<p class='recommended'>Recommended</p>";
-            } else {
-                recommendationDiv.innerHTML = "<p class='not-recommended'>Not Recommended</p>";
-            }
-
-            updateRecommendationGrid(doseDecreaseValue);
-        });
-
-        function updateRecommendationGrid(doseDecreaseValue) {
-            recommendationGrid.innerHTML = '';
-            const averageCaffeineIntake = {{ profile.avg_caffeine_intake }}; // Retrieve average caffeine intake from Django model
-            const daysToZero = Math.ceil(averageCaffeineIntake / doseDecreaseValue);
-            const numBoxes = Math.ceil(daysToZero / 7) * 7;
-
-            for (let i = 0; i < numBoxes; i++) {
-                const recommendedIntake = Math.max(averageCaffeineIntake - (doseDecreaseValue * i), 0);
-                const box = document.createElement('div');
-                box.classList.add('grid-item');
-                if (i % 7 === 0) {
-                    box.textContent = "Day " + (i / 7 + 1);
-                } else {
-                    box.textContent = recommendedIntake + " mg";
-                }
-                recommendationGrid.appendChild(box);
-            }
-        }
-
-        chooseScheduleBtn.addEventListener('click', function() {
-            // Redirect user to choose the recommended schedule page
-            // Replace 'recommended-schedule-page.html' with the actual URL
-            window.location.href = 'recommended-schedule-page.html';
-        });
+        const avgCaffeineIntake = {{ avg_caffeine_intake }}; // Retrieve average caffeine intake from Django view
+        const avgCaffeineIntakeHeader = document.getElementById('avg-caffeine-intake-header');
+        avgCaffeineIntakeHeader.textContent = `Average Caffeine Intake: ${avgCaffeineIntake} mg`;
     </script>
 </body>
 </html>
