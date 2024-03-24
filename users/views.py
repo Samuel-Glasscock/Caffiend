@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
 from .models import Profile
-from .forms import UserSignupForm, UserProfileForm
+from .forms import UserSignupForm, UserProfileForm, UpdateAvgCaffeineIntakeForm
 from django.contrib.auth import login
 from django.db import transaction
 
@@ -28,7 +28,24 @@ class ProfileView(LoginRequiredMixin, DetailView):
 
     def get_object(self):
         return self.request.user.profile
-    
+
+
+def profile(request):
+    # Retrieve user profile and pass it to the template
+    profile = request.user.profile
+    context = {'user': request.user, 'profile': profile}
+    return render(request, 'profile.html', context)
+
+def update_avg_caffeine_intake(request):
+    if request.method == 'POST':
+        form = UpdateAvgCaffeineIntakeForm(request.POST, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = UpdateAvgCaffeineIntakeForm(instance=request.user.profile)
+    return render(request, 'update_avg_caffeine_intake.html', {'form': form})
+
 def signup(request):
     if request.method == 'POST':
         form = UserSignupForm(request.POST)

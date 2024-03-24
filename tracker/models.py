@@ -32,3 +32,5 @@ class HealthData(models.Model):
     def __str__(self):
         return f"{self.user}'s health data"
 
+    # models.py
+
