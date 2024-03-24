@@ -1,6 +1,34 @@
-<h1>You are on Profile</h1>
-<a href="{% url 'tracker:reduce_intake' %}">Reduce Intake</a>
-<form action="{% url 'logout' %}" method="post">
-    {% csrf_token %}
-    <button type="submit">Logout</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>User Profile</h1>
+
+    <!-- Display user profile information -->
+    <p>Username: {{ user.username }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Average Caffeine Intake: {{ profile.avg_caffeine_intake }}</p>
+
+    <!-- Form to update average caffeine intake -->
+    <form action="{% url 'update_avg_caffeine_intake' %}" method="post">
+        {% csrf_token %}
+        <label for="avg_caffeine_intake">Average Caffeine Intake (mg):</label>
+        <input type="number" id="avg_caffeine_intake" name="avg_caffeine_intake" value="{{ profile.avg_caffeine_intake }}">
+        <button type="submit">Update</button>
+    </form>
+
+    <!-- Navigation links -->
+    <h1>You are on Profile</h1>
+    <a href="{% url 'tracker:reduce_intake' %}">Reduce Intake</a>
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>
+
+

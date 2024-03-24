@@ -21,13 +21,16 @@
         .not-recommended {
             background-color: tomato;
         }
+        .zero-intake {
+            background-color: tomato; /* Change color for box with 0mg intake */
+        }
     </style>
 </head>
 <body>
     <h1>Reset Tolerance/Reduce Intake</h1>
     <h2 id="avg-caffeine-intake-header"></h2> <!-- Header to display average caffeine intake -->
     <label for="dose-decrease">Select dose decrease (mg):</label>
-    <input type="range" id="dose-decrease" name="dose_decrease" min="10" max="30" value="20">
+    <input type="range" id="dose-decrease" name="dose_decrease" min="10" max="{{ max_caffeine_intake }}" value="20" step="10" oninput="updateRecommendationGrid()">
     <output for="dose-decrease" id="dose-output">20 mg</output><br>
     <div class="recommendation"></div>
     <div class="grid-container" id="recommendation-grid"></div>
@@ -36,7 +39,46 @@
     <script>
         const avgCaffeineIntake = {{ avg_caffeine_intake }}; // Retrieve average caffeine intake from Django view
         const avgCaffeineIntakeHeader = document.getElementById('avg-caffeine-intake-header');
-        avgCaffeineIntakeHeader.textContent = `Average Caffeine Intake: ${avgCaffeineIntake} mg`;
+        avgCaffeineIntakeHeader.textContent = `Average Caffeine Intake: ${avgCaffeineIntake.toFixed(1)} mg`;
+
+        function updateRecommendationGrid() {
+            const doseDecreaseValue = parseInt(document.getElementById('dose-decrease').value);
+            const recommendationDiv = document.querySelector('.recommendation');
+            const recommendationGrid = document.getElementById('recommendation-grid');
+            const numBoxes = 14; // Always display 14 boxes
+
+            if (doseDecreaseValue >= 10 && doseDecreaseValue <= 30) {
+                recommendationDiv.innerHTML = "<p class='recommended'>Recommended</p>";
+            } else {
+                recommendationDiv.innerHTML = "<p class='not-recommended'>Not Recommended</p>";
+            }
+
+            recommendationGrid.innerHTML = '';
+
+            for (let i = 0; i < numBoxes; i++) {
+                const recommendedIntake = Math.max(avgCaffeineIntake - (doseDecreaseValue * i), 0); // Round down to nearest tenth
+                const box = document.createElement('div');
+                box.classList.add('grid-item');
+
+                if (recommendedIntake === 0) {
+                    box.classList.add('zero-intake');
+                    box.textContent = "0 mg";
+                    break; // Stop loop once 0mg intake box is added
+                } else {
+                    box.textContent = recommendedIntake.toFixed(1) + " mg";
+                }
+
+                recommendationGrid.appendChild(box);
+            }
+        }
+
+        const chooseScheduleBtn = document.getElementById('choose-schedule-btn');
+        chooseScheduleBtn.addEventListener('click', function() {
+            // Redirect user to choose the recommended schedule page
+            // Replace 'recommended-schedule-page.html' with the actual URL
+            window.location.href = 'recommended-schedule-page.html';
+        });
     </script>
 </body>
 </html>
+
