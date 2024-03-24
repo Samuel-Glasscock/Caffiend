@@ -1,52 +1,17 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caffeind</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}"> <!-- Link to your CSS file -->
-</head>
-<body>
-    <header>
-        <h1>Caffeine Optimization App</h1>
 
-        <form action="{% url 'login' %}" method="get">
-            <button type="submit">Login</button>
-        </form>
+{% block content %}
+<div class="middle">
+    <div class="paragraph">
+        <h2>All About Caffeine: Myths, Benefits, and Risks</h2>
+        <p>A shocking 85% of Americans drink at least 1 cup of caffeinated drink a day. While caffeine can have some positive boosts like alertness, it’s important that the body does not build up a tolerance to caffeine to maintain these positive effects. If you drink a lot of caffeinated beverages often, you’ve likely built up your tolerance, desensitizing your body to the effects of the stimulant. More caffeine will be required to get the same effects, which can be dangerous if the levels are too high. 
+            <br>
+            <br>
+            Caffiend is here to help you reset your caffeine tolerance! Enter your caffeine consumption and your body info to get a personalized routine to help wean you off coffee until your tolerance is reset. You won’t be cut off completely! Our algorithm uses your imputed data to decrease your consumption over time to slowly cut back on your caffeine intake.
+        </p>
+    </div>
+    <img class="coffeePic" src="{% static 'shared/images/coffee_cup.png' %}" width="600" height="400" alt="Coffee Brain">
+</div>
+{% endblock %}
 
-        <form action= "{% url 'signup'%}" method="get">
-            <button type="submit">Sign Up</button>
-        </form>
-        <!-- <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Sign Up</a></li>
-                <li><a href="#">Log In</a></li>
-            </ul>
-        </nav> -->
-    </header>
-
-    <section class="hero">
-        <div class="hero-content">
-            <h2>Optimize Your Caffeine Consumption</h2>
-            <p>Make the most out of your daily caffeine intake while avoiding tolerance buildup.</p>
-            <a href="#about" class="btn">Learn More</a>
-        </div>
-    </section>
-
-    <section id="about" class="about">
-        <div class="about-content">
-            <h2>About Us</h2>
-            <p>Welcome to the Caffeine Optimization App, where we help you maximize the benefits of caffeine while minimizing tolerance buildup.</p>
-            <p>Our app provides personalized recommendations based on scientific research and your individual caffeine consumption habits.</p>
-            <a href="#signup" class="btn">Sign Up Now</a>
-        </div>
-    </section>
-
-    <footer>
-        <p>&copy; 2024 Caffeine Optimization App. All rights reserved.</p>
-    </footer>
-</body>
-</html>
