@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+
+html, body {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(242, 236, 217);
+    
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 100px;
+    background-color: #C4A484;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.image {
+    margin-right: 15px;
+}
+
+button {
+  background-color:rgb(56, 31, 3);
+  border: none; /* Remove border */
+  color: white; /* White text color */
+  padding: 15px 32px; /* Padding */
+  text-align: center; /* Center-align text */
+  text-decoration: none; /* Remove underline */
+  display: inline-block; /* Display as inline-block */
+  font-size: 16px; /* Font size */
+  margin: 4px 2px; /* Margin */
+  cursor: pointer; /* Cursor on hover */
+  border-radius: 10px; /* Rounded corners */
+}
+
+button:hover {
+    background-color: rgb(242, 236, 217);
+    color:rgb(56, 31, 3);
+}
+
+hr {
+    height: 5px;
+    background-color: rgb(56, 31, 3);
+    border: none;
+    
+}
+
+.title {
+    font-family: "Nunito";
+    font-size: 60px;
+    color:rgb(56, 31, 3);
+}
+
+.container {
+    padding-right: 100px;
+}
+
+.paragraph {
+    font-family: "Nunito";
+    width: 50%;
+    padding-left: 30px;
+    margin-right: 20px;
+}
+
+.coffeePic {
+    size: 50%;
+}
+
+.middle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 60px;
+}
