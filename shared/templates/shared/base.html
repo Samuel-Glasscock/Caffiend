@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caffeind</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!--  to remove bootstrap, just remove this line -->
     <link rel="stylesheet" href="{% static 'shared/style.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,15 +14,16 @@
 </head>
 <body>
     <header class="header">
-        <!-- <img src="{% static 'images/logo.png' %}" width="90" height="70" alt="Logo"> -->
         <h1>Caffiend</h1>
         <nav>
-            <form action="{% url 'login' %}" method="get">
-                <button type="submit">Login</button>
-            </form>
-            <form action="{% url 'signup' %}" method="get">
-                <button type="submit">Sign Up</button>
-            </form>
+            <div class="d-flex justify-content-around">
+                <form action="{% url 'login' %}" method="get">
+                    <button type="submit" class="btn login-btn">Login</button>
+                </form>
+                <form action="{% url 'signup' %}" method="get">
+                    <button type="submit" class="btn signup-btn">Sign Up</button>
+                </form>
+            </div>
         </nav>
     </header>
     
