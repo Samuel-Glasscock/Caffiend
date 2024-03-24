@@ -36,7 +36,7 @@
         <h1>Track Caffeine Intake</h1>
         <h2 id="avg-caffeine-intake-header">Average Caffeine Intake: {{ avg_caffeine_intake }} mg</h2>
 
-        <form action="#" method="POST">
+        <form action="#" method="POST" id="caffeine-form">
             {% csrf_token %}
             <table class="table">
                 <thead>
@@ -59,6 +59,10 @@
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="consumed_{{ entry.day_number }}" id="no_{{ entry.day_number }}" value="no">
                                 <label class="form-check-label" for="no_{{ entry.day_number }}">No</label>
+                            </div>
+                            <div id="caffeine-input-{{ entry.day_number }}" class="hidden">
+                                <label for="caffeine-consumed-{{ entry.day_number }}">Enter the amount of caffeine consumed (mg):</label>
+                                <input type="number" id="caffeine-consumed-{{ entry.day_number }}" class="form-control">
                             </div>
                         </td>
                     </tr>
@@ -85,11 +89,31 @@
             radioButtons.forEach(function (radioButton, index) {
                 radioButton.addEventListener('change', function () {
                     if (radioButton.checked) {
-                        radioButtons[index + 1].disabled = false; // Enable the next radio button when the current one is checked
+                        const nextIndex = index + 1;
+                        if (nextIndex < radioButtons.length) {
+                            radioButtons[nextIndex].disabled = false; // Enable the next radio button when the current one is checked
+                        }
                         radioButtons[index].disabled = true; // Disable the current radio button
+
+                        const dayNumber = radioButton.id.split('_')[1];
+                        if (radioButton.value === 'no') {
+                            document.getElementById(`caffeine-input-${dayNumber}`).classList.remove('hidden');
+                        }
                     }
                 });
             });
+        });
+
+        document.getElementById('caffeine-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Handle form submission according to your application logic
+
+            // For demonstration, you can print the form data
+            const formData = new FormData(this);
+            for (let entry of formData.entries()) {
+                console.log(entry[0], entry[1]);
+            }
         });
     </script>
 </body>
