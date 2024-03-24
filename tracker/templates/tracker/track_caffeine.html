@@ -1,5 +1,97 @@
-should go 8 days of 0 caffeine.
+<!DOCTYPE html>
+<html lang="en">
 
-then can see if tolerance has improved by consuming 30 mg and tracking symptoms.
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Caffeine Intake</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .grid-item {
+            padding: 10px;
+            text-align: center;
+        }
 
+        .recommended {
+            background-color: lightgreen;
+        }
 
+        .not-recommended {
+            background-color: #8a47ff;
+        }
+
+        .zero-intake {
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1>Track Caffeine Intake</h1>
+        <h2 id="avg-caffeine-intake-header">Average Caffeine Intake: {{ avg_caffeine_intake }} mg</h2>
+
+        <form action="#" method="POST">
+            {% csrf_token %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Recommended Caffeine</th>
+                        <th>I consumed this much or less caffeine</th>
+                    </tr>
+                </thead>
+                <tbody id="schedule-body">
+                    {% for entry in schedule %}
+                    <tr>
+                        <td>{{ entry.date }}</td>
+                        <td>{{ entry.recommended_caffeine }} mg</td>
+                        <td>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="consumed_{{ entry.day_number }}" id="yes_{{ entry.day_number }}" value="yes">
+                                <label class="form-check-label" for="yes_{{ entry.day_number }}">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="consumed_{{ entry.day_number }}" id="no_{{ entry.day_number }}" value="no">
+                                <label class="form-check-label" for="no_{{ entry.day_number }}">No</label>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript to handle radio button selection -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const radioButtons = document.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(function (radioButton, index) {
+                if (index !== 0) {
+                    radioButton.disabled = true; // Disable radio buttons except for the first one (index 0)
+                }
+            });
+
+            radioButtons.forEach(function (radioButton, index) {
+                radioButton.addEventListener('change', function () {
+                    if (radioButton.checked) {
+                        radioButtons[index + 1].disabled = false; // Enable the next radio button when the current one is checked
+                        radioButtons[index].disabled = true; // Disable the current radio button
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

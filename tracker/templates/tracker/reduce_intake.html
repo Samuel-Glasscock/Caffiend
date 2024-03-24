@@ -118,12 +118,12 @@
 
         const chooseScheduleBtn = document.getElementById('choose-schedule-btn');
         chooseScheduleBtn.addEventListener('click', function() {
-            window.location.href = '/tracker/reduce-intake/track_caffeine/';
+            const doseDecreaseValue = document.getElementById('dose-decrease').value;
+            window.location.href = `/tracker/reduce-intake/track_caffeine/?dose_decrease=${doseDecreaseValue}`;
         });
 
     </script>
+
 </body>
 
 </html>
-
-
