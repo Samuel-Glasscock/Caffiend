@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Caffeine Intake</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .grid-item {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .recommended {
+            background-color: lightgreen;
+        }
+
+        .not-recommended {
+            background-color: #8a47ff;
+        }
+
+        .zero-intake {
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1>Track Caffeine Intake</h1>
+        <h2 id="avg-caffeine-intake-header">Average Caffeine Intake: {{ avg_caffeine_intake }} mg</h2>
+
+        <form action="#" method="POST" id="caffeine-form">
+            {% csrf_token %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Recommended Caffeine</th>
+                        <th>I consumed this much or less caffeine</th>
+                    </tr>
+                </thead>
+                <tbody id="schedule-body">
+                    {% for entry in schedule %}
+                    <tr id="day-{{ entry.day_number }}" class="{% if entry.day_number == 1 %}zero-intake{% endif %}">
+                        <td>{{ entry.date }}</td>
+                        <td>{{ entry.recommended_caffeine }} mg</td>
+                        <td>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="consumed_{{ entry.day_number }}" id="yes_{{ entry.day_number }}" value="yes" {% if entry.day_number != 1 %}disabled{% endif %}>
+                                <label class="form-check-label" for="yes_{{ entry.day_number }}">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="consumed_{{ entry.day_number }}" id="no_{{ entry.day_number }}" value="no" {% if entry.day_number != 1 %}disabled{% endif %}>
+                                <label class="form-check-label" for="no_{{ entry.day_number }}">No</label>
+                            </div>
+                            <div id="caffeine-input-{{ entry.day_number }}" class="hidden">
+                                <label for="caffeine-consumed-{{ entry.day_number }}">Enter the amount of caffeine consumed (mg):</label>
+                                <input type="number" id="caffeine-consumed-{{ entry.day_number }}" class="form-control">
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript to handle radio button selection -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const radioButtons = document.querySelectorAll('input[type="radio"]');
+            radioButtons.forEach(function (radioButton, index) {
+                radioButton.addEventListener('change', function () {
+                    if (radioButton.checked) {
+                        const currentDayIndex = parseInt(radioButton.id.split('_')[1]);
+                        const nextIndex = currentDayIndex + 1;
+                        if (nextIndex < radioButtons.length) {
+                            radioButtons[nextIndex].disabled = false; // Enable the radio button for the next day
+                        }
+                        radioButtons[index].disabled = true; // Disable the current radio button
+
+                        const dayNumber = radioButton.id.split('_')[1];
+                        if (radioButton.value === 'no') {
+                            document.getElementById(`caffeine-input-${dayNumber}`).classList.remove('hidden');
+                        }
+                    }
+                });
+            });
+        });
+
+        document.getElementById('caffeine-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Handle form submission according to your application logic
+
+            // For demonstration, you can print the form data
+            const formData = new FormData(this);
+            for (let entry of formData.entries()) {
+                console.log(entry[0], entry[1]);
+            }
+
+            // Update the appearance of the next day (if any)
+            const currentDayIndex = parseInt(document.querySelector('input[type="radio"]:checked').id.split('_')[1]);
+            const nextDayIndex = currentDayIndex + 1;
+            const nextDayRow = document.getElementById(`day-${nextDayIndex}`);
+            if (nextDayRow) {
+                nextDayRow.classList.add('zero-intake');
+            }
+
+            // Disable radio buttons for the submitted day
+            const submittedRadioButton = document.querySelector('input[type="radio"]:checked');
+            submittedRadioButton.disabled = true;
+
+            // Remove bold styling from the previous day
+            const previousDayIndex = currentDayIndex - 1;
+            const previousDayRow = document.getElementById(`day-${previousDayIndex}`);
+            if (previousDayRow) {
+                previousDayRow.classList.remove('zero-intake');
+            }
+        });
+    </script>
+</body>
+
+</html>
+
