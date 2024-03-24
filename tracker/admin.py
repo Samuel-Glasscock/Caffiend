@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import CaffeineIntake, HealthData
 
-# Register your models here.
+admin.site.register(CaffeineIntake)
+admin.site.register(HealthData)
